@@ -7,14 +7,11 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import Drawer from "@material-ui/core/Drawer";
-import MenuIcon from "@material-ui/core/Menu";
+import MenuIcon from "@material-ui/icons/Menu";
 import { Link } from "react-router-dom";
 import { auth } from "./firebase";
 
 export function SignIn(props) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(u => {
       if (u) {
@@ -26,9 +23,12 @@ export function SignIn(props) {
     return unsubscribe;
   }, [props.history]);
 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const handleSignIn = () => {
     auth
-      .signInWithEmailandPassword(email, password)
+      .signInWithEmailAndPassword(email, password)
       .then(() => {})
       .catch(error => {
         alert(error.message);
@@ -86,9 +86,6 @@ export function SignIn(props) {
 }
 
 export function SignUp(props) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(u => {
       if (u) {
@@ -100,9 +97,12 @@ export function SignUp(props) {
     return unsubscribe;
   }, [props.history]);
 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const handleSignUp = () => {
     auth
-      .createUserWithEmailandPassword(email, password)
+      .createUserWithEmailAndPassword(email, password)
       .then(() => {})
       .catch(error => {
         alert(error.message);
@@ -175,6 +175,10 @@ export function App(props) {
     return unsubscribe;
   }, [props.history]);
 
+  if (!user) {
+    return <div />;
+  }
+
   const handleSignOut = () => {
     auth
       .signOut()
@@ -186,16 +190,12 @@ export function App(props) {
       });
   };
 
-  if (!user) {
-    return <div />;
-  }
-
   return (
     <div>
       <AppBar position="static" color="primary">
         <Toolbar>
           <IconButton
-            color="inhert"
+            color="inherit"
             onClick={() => {
               setDrawerOpen(true);
             }}
@@ -210,7 +210,7 @@ export function App(props) {
             My App
           </Typography>
           <Typography color="inherit" style={{ marginRight: "30px" }}>
-            Hi! {user.email}
+            Hi {user.email}!
           </Typography>
           <Button color="inherit" onClick={handleSignOut}>
             Sign out
